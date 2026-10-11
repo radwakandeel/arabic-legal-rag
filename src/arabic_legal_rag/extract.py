@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 import pdfplumber
+from pdfplumber.utils import extract_text
 
 PDF = Path("data/raw/civil_code.pdf")
 OUT = Path("data/processed/articles.json")
@@ -11,6 +12,8 @@ AR_DIGITS = {0x660 + i: ord(str(i)) for i in range(10)}
 DIG = r"[0-9\u0660-\u0669]+"
 LETTER = r"[\u0621-\u064A]"
 JUNK = r"[()\s\u200e\u200f]*"
+LIGS = {"\u0644\u0627": "\ue000", "\u0644\u0623": "\ue001", "\u0644\u0625": "\ue002", "\u0644\u0622": "\ue003"}
+LIG_BACK = {v: k for k, v in LIGS.items()}
 EN_HEAD = r"^\s*Article\s*(" + DIG + r")\b\s*[().:]*\s*(.*)$"
 AR_HEAD = "^\\s*\u0645\u0627\u062f\u0629" + JUNK + "(" + DIG + ")" + JUNK + "$"
 EN_NOTE = re.compile(
@@ -34,7 +37,17 @@ def fix_ar_line(line):
     s = line[::-1]
     s = re.sub(DIG, lambda m: m.group()[::-1], s)
     s = re.sub(r"\((" + DIG + r")\(", r"(\1)", s)
+    for k, v in LIG_BACK.items():
+        s = s.replace(k, v)
     return s
+
+
+def right_text(page):
+    w, h = page.width, page.height
+    chars = [dict(c) for c in page.crop((w / 2, 0, w, h)).chars]
+    for c in chars:
+        c["text"] = LIGS.get(c["text"], c["text"])
+    return extract_text(chars) if chars else ""
 
 
 def fix_lam_alef(s):
@@ -101,7 +114,7 @@ def main():
         for page in pdf.pages:
             w, h = page.width, page.height
             left = page.crop((0, 0, w / 2, h)).extract_text() or ""
-            right = page.crop((w / 2, 0, w, h)).extract_text() or ""
+            right = right_text(page)
             en_lines += left.splitlines()
             ar_lines += [fix_ar_line(x) for x in right.splitlines()]
 
@@ -132,7 +145,7 @@ def main():
 
     records = []
     for n in nums:
-        t_ar = fix_lam_alef(ar.get(n, ""))
+        t_ar = ar.get(n, "")
         t_en = en.get(n, "")
         records.append(
             {
