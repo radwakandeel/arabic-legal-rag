@@ -1,0 +1,22 @@
+[
+  {"article": 1, "question_ar": "ما الذي يطبقه القاضي إذا لم يوجد نص تشريعي يمكن تطبيقه؟", "question_en": "What does the judge apply if there is no applicable legislative provision?"},
+  {"article": 2, "question_ar": "كيف يمكن إلغاء نص تشريعي؟", "question_en": "How can a legislative provision be repealed?"},
+  {"article": 104, "question_ar": "إذا تم العقد عن طريق نائب، فبشخص من يعتد عند النظر في عيوب الإرادة؟", "question_en": "When a contract is made through a representative, whose consent is examined for vices of consent?"},
+  {"article": 126, "question_ar": "متى يجوز للمتعاقد طلب إبطال العقد بسبب تدليس صدر من شخص غير المتعاقد الآخر؟", "question_en": "When can a party demand avoidance of a contract because of fraud committed by a third party?"},
+  {"article": 146, "question_ar": "هل تنتقل الالتزامات والحقوق الشخصية المتصلة بشيء إلى من يخلف المالك في ملكية هذا الشيء؟", "question_en": "Do personal obligations and rights attached to a thing pass to the particular successor who acquires the thing?"},
+  {"article": 147, "question_ar": "هل يمكن للقاضي تعديل التزام تعاقدي أصبح مرهقا بسبب حوادث استثنائية غير متوقعة؟", "question_en": "Can a judge reduce a contractual obligation that has become excessively onerous because of exceptional unforeseeable events?"},
+  {"article": 149, "question_ar": "ماذا يفعل القاضي بالشروط التعسفية في عقد الإذعان؟", "question_en": "What can a judge do with unfair conditions in a contract of adhesion?"},
+  {"article": 171, "question_ar": "كيف يحدد القاضي طريقة التعويض، وهل يجوز أن يكون التعويض أقساطا أو إيرادا مرتبا؟", "question_en": "How does the judge decide the method of paying damages, and can damages be paid by installments or as a regular periodical payment?"},
+  {"article": 176, "question_ar": "هل يسأل حارس الحيوان عن الضرر الذي يحدثه الحيوان إذا لم يكن مالكه؟", "question_en": "Is the person in charge of an animal liable for harm it causes even if he is not its owner?"},
+  {"article": 204, "question_ar": "متى ينقل الالتزام بنقل الملكية الحق من تلقاء نفسه؟", "question_en": "When does an obligation to transfer ownership transfer the right automatically?"},
+  {"article": 213, "question_ar": "متى يجوز للدائن أن يحصل على حكم بإلزام المدين بالتنفيذ مع دفع غرامة إذا امتنع؟", "question_en": "When can a creditor obtain a judgment ordering the debtor to perform with a penalty for refusal?"},
+  {"article": 220, "question_ar": "في أي الحالات لا يلزم إعذار المدين؟", "question_en": "In which cases is a formal summons to the debtor not necessary?"},
+  {"article": 281, "question_ar": "هل يجوز لأحد الدائنين المتضامنين مطالبة المدين بالوفاء منفردا، وبأي أوجه دفع يحتج عليه المدين؟", "question_en": "Can one of several joint and several creditors sue the debtor alone, and which defenses may the debtor raise against him?"},
+  {"article": 336, "question_ar": "ماذا يفعل المدين إذا امتنع الدائن عن تسلم شيء معين بالذات يجب تسليمه في المكان الذي يوجد فيه؟", "question_en": "What may a debtor do when the creditor does not take delivery of a specific thing that must be delivered where it is situated?"},
+  {"article": 549, "question_ar": "ما تعريف الصلح؟", "question_en": "What is a compromise under the Civil Code?"},
+  {"article": 720, "question_ar": "ما درجة العناية المطلوبة من المودع عنده إذا كانت الوديعة بغير أجر؟", "question_en": "What degree of care must the depository exercise when the deposit is gratuitous?"},
+  {"article": 945, "question_ar": "ما أثر أخذ الشفيع للعقار بالشفعة في علاقته بالبائع؟", "question_en": "What is the effect of preemption on the preemptor's position toward the vendor?"},
+  {"article": 1096, "question_ar": "ما هو الرهن الحيازي؟", "question_en": "What is a pledge under the Civil Code?"},
+  {"article": 1020, "question_ar": "ما الأعمال التي يحق لمالك العقار المرتفق القيام بها لاستعمال حق الارتفاق والمحافظة عليه؟", "question_en": "What works may the owner of the dominant tenement carry out to use and preserve a servitude?"},
+  {"article": 1021, "question_ar": "هل يلزم مالك العقار المرتفق به بالقيام بأعمال لمصلحة العقار المرتفق؟", "question_en": "Is the owner of the servient tenement obliged to carry out work for the benefit of the dominant tenement?"}
+]
