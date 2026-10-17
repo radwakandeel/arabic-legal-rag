@@ -221,3 +221,7 @@ __marimo__/
 data/raw/*.pdf
 data/processed/*.json
 data/chroma/
+mlflow.db
+mlartifacts/
+mlruns/
+data/emb_cache/
