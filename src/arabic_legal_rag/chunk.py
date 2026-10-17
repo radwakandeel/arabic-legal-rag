@@ -8,20 +8,21 @@ OUT = Path("data/processed/chunks.json")
 PARA = re.compile(r"(?=^[ \t]*\([ \t]*[0-9\u0660-\u0669]+[ \t]*\))", re.M)
 
 
-def split_text(text, max_chars):
+def split_text(text, max_chars, overlap=0):
+    """Pack paragraphs up to max_chars; repeat the last `overlap` paragraphs at the start of the next chunk."""
     pieces = [p for p in PARA.split(text) if p.strip()]
-    chunks, cur = [], ""
+    chunks, cur = [], []
     for p in pieces:
-        if cur and len(cur) + len(p) > max_chars:
-            chunks.append(cur.strip())
-            cur = ""
-        cur += p
-    if cur.strip():
-        chunks.append(cur.strip())
+        if cur and sum(len(x) for x in cur) + len(p) > max_chars:
+            chunks.append("".join(cur).strip())
+            cur = cur[-overlap:] if overlap > 0 else []
+        cur.append(p)
+    if "".join(cur).strip():
+        chunks.append("".join(cur).strip())
     return chunks or [text.strip()]
 
 
-def build(max_chars):
+def build(max_chars, overlap=0):
     arts = json.loads(IN.read_text(encoding="utf-8"))
     out = []
     for a in arts:
@@ -43,7 +44,7 @@ def build(max_chars):
                 }
             )
             continue
-        parts = split_text(a["text_ar"], max_chars)
+        parts = split_text(a["text_ar"], max_chars, overlap)
         for i, t in enumerate(parts, 1):
             out.append(
                 {
@@ -60,8 +61,9 @@ def build(max_chars):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-chars", type=int, default=1500)
+    ap.add_argument("--overlap", type=int, default=0, help="paragraphs repeated at the start of the next chunk")
     args = ap.parse_args()
-    chunks = build(args.max_chars)
+    chunks = build(args.max_chars, args.overlap)
     OUT.write_text(json.dumps(chunks, ensure_ascii=False, indent=2), encoding="utf-8")
     lengths = [len(c["text_ar"]) for c in chunks]
     over = [c["id"] for c in chunks if len(c["text_ar"]) > args.max_chars]

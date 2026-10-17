@@ -11,6 +11,7 @@ import mlflow
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
+from arabic_legal_rag.chunk import build as build_chunks
 from arabic_legal_rag.eval_hard import QUESTIONS
 
 CHUNKS = Path("data/processed/chunks.json")
@@ -31,6 +32,11 @@ CONFIGS = [
     dict(name="r4-e5base-mindist", model=E5B, fusion="min_distance", sections=True),
     dict(name="r5-bgem3-mindist", model=BGE, fusion="min_distance", sections=True, slow=True),
     dict(name="r6-bgem3-rrf", model=BGE, fusion="rrf", sections=True, slow=True),
+    dict(name="r7-e5small-c400-o0", model=E5S, fusion="min_distance", sections=True, chunk=(400, 0)),
+    dict(name="r8-e5small-c400-o1", model=E5S, fusion="min_distance", sections=True, chunk=(400, 1)),
+    dict(name="r9-e5small-c800-o0", model=E5S, fusion="min_distance", sections=True, chunk=(800, 0)),
+    dict(name="r10-e5small-c800-o1", model=E5S, fusion="min_distance", sections=True, chunk=(800, 1)),
+    dict(name="r11-e5small-c1200-o0", model=E5S, fusion="min_distance", sections=True, chunk=(1200, 0)),
 ]
 
 _models = {}
@@ -55,9 +61,9 @@ def build_docs(chunks, sections, lang, use_sections):
     return docs, np.array(arts)
 
 
-def doc_vectors(model_name, lang, use_sections, docs):
+def doc_vectors(model_name, lang, use_sections, docs, chunk_tag=""):
     tag = model_name.replace("/", "_")
-    f = CACHE / f"{tag}_{lang}_{'sec' if use_sections else 'nosec'}.npy"
+    f = CACHE / f"{tag}_{lang}_{'sec' if use_sections else 'nosec'}{chunk_tag}.npy"
     if f.exists():
         v = np.load(f)
         if v.shape[0] == len(docs):
@@ -116,6 +122,7 @@ def metrics(ranks):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--all", action="store_true", help="include slow runs (bge-m3)")
+    ap.add_argument("--chunking", action="store_true", help="include chunk_size/overlap runs")
     ap.add_argument("--only", nargs="*", help="run only these run names")
     a = ap.parse_args()
 
@@ -137,12 +144,17 @@ def main():
                 continue
         elif cfg.get("slow") and not a.all:
             continue
+        elif cfg.get("chunk") and not a.chunking:
+            continue
         print("RUN", cfg["name"], flush=True)
         t0 = time.time()
+        max_chars, overlap = cfg.get("chunk", (1500, 0))
+        run_chunks = build_chunks(max_chars, overlap)
         mats, ids = {}, {}
         for lang in ("ar", "en"):
-            docs, ids[lang] = build_docs(chunks, sections, lang, cfg["sections"])
-            mats[lang] = doc_vectors(cfg["model"], lang, cfg["sections"], docs)
+            docs, ids[lang] = build_docs(run_chunks, sections, lang, cfg["sections"])
+            chunk_tag = "" if lang == "en" or (max_chars, overlap) == (1500, 0) else f"_c{max_chars}_o{overlap}"
+            mats[lang] = doc_vectors(cfg["model"], lang, cfg["sections"], docs, chunk_tag)
         ranks = {}
         for q in questions:
             qv = query_vector(cfg["model"], q["question"])
@@ -156,7 +168,9 @@ def main():
                     "embedding_model": cfg["model"],
                     "fusion": cfg["fusion"],
                     "use_section_headings": cfg["sections"],
-                    "chunk_max_chars": CHUNK_MAX_CHARS,
+                    "chunk_max_chars": max_chars,
+                    "chunk_overlap_paragraphs": overlap,
+                    "n_chunks": len(run_chunks),
                     "n_per_index": N_PER_INDEX,
                     "n_questions": len(questions),
                 }
