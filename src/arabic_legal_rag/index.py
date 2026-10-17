@@ -9,6 +9,7 @@ CHUNKS = Path("data/processed/chunks.json")
 ARTICLES = Path("data/processed/articles.json")
 DB_DIR = "data/chroma"
 MODEL = "BAAI/bge-m3"
+INDEX_BATCH_SIZE = 64
 _model = None
 
 
@@ -51,28 +52,29 @@ def build():
             pass
         col = client.create_collection(name, metadata={"hnsw:space": "cosine"})
         rows = [(i, c) for i, c in enumerate(chunks) if (c.get(f"text_{lang}") or "").strip()]
-        ids = [f"{lang}-{i}" for i, _ in rows]
-        docs = []
-        for _, c in rows:
-            sec = sections.get(c["article_number"], {}).get(lang, "")
-            docs.append((sec + "\n" if sec else "") + c[f"text_{lang}"])
-        metas = [
-            {
-                "article_number": c["article_number"],
-                "part": c.get("part", 1),
-                "citation": c["citation"],
-                "is_repealed": bool(c["is_repealed"]),
-                "ar_incomplete": bool(c.get("ar_incomplete", False)),
-            }
-            for _, c in rows
-        ]
-        vecs = embed(docs, "passage: ")
-        for s in range(0, len(ids), 500):
+        for s in range(0, len(rows), INDEX_BATCH_SIZE):
+            batch_rows = rows[s:s + INDEX_BATCH_SIZE]
+            ids = [f"{lang}-{i}" for i, _ in batch_rows]
+            docs = []
+            for _, c in batch_rows:
+                sec = sections.get(c["article_number"], {}).get(lang, "")
+                docs.append((sec + "\n" if sec else "") + c[f"text_{lang}"])
+            metas = [
+                {
+                    "article_number": c["article_number"],
+                    "part": c.get("part", 1),
+                    "citation": c["citation"],
+                    "is_repealed": bool(c["is_repealed"]),
+                    "ar_incomplete": bool(c.get("ar_incomplete", False)),
+                }
+                for _, c in batch_rows
+            ]
+            vecs = embed(docs, "passage: ")
             col.add(
-                ids=ids[s:s + 500],
-                documents=docs[s:s + 500],
-                metadatas=metas[s:s + 500],
-                embeddings=vecs[s:s + 500],
+                ids=ids,
+                documents=docs,
+                metadatas=metas,
+                embeddings=vecs,
             )
         print(lang, "indexed:", col.count())
 

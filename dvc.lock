@@ -1,0 +1,74 @@
+schema: '2.0'
+stages:
+  corpus:
+    cmd: uv run python -m arabic_legal_rag.extract && uv run python 
+      scripts/fixup5.py && uv run python scripts/fixup6.py && uv run python 
+      scripts/fixup7.py --apply && uv run python scripts/fixup8.py --apply
+    deps:
+    - path: data/raw/civil_code.pdf
+      hash: md5
+      md5: 5086ef5f16f15d856278db943e58e948
+      size: 2599703
+      isexec: true
+    - path: scripts/fixup5.py
+      hash: md5
+      md5: ebcb191552f8a605b750b7f24f3f829c
+      size: 633
+    - path: scripts/fixup6.py
+      hash: md5
+      md5: 55574628a27e03301e87e67acf2b9607
+      size: 1137
+    - path: scripts/fixup7.py
+      hash: md5
+      md5: 66b859d3d01574f77aec025a99026f49
+      size: 968
+    - path: scripts/fixup8.py
+      hash: md5
+      md5: 8cfe85e4fe7d3e3c41082eb75b163617
+      size: 1702
+    - path: src/arabic_legal_rag/extract.py
+      hash: md5
+      md5: 204be45dbc41aa0ac633f751c66db658
+      size: 5820
+    outs:
+    - path: data/processed/articles.json
+      hash: md5
+      md5: 83728f8e9d7ae953a70bbde30b0c32c5
+      size: 1192731
+  chunks:
+    cmd: uv run python -m arabic_legal_rag.chunk --max-chars 1500 --overlap 0
+    deps:
+    - path: data/processed/articles.json
+      hash: md5
+      md5: 83728f8e9d7ae953a70bbde30b0c32c5
+      size: 1192731
+    - path: src/arabic_legal_rag/chunk.py
+      hash: md5
+      md5: f02ace36cc18044a323dad1f8e70cc04
+      size: 2725
+    outs:
+    - path: data/processed/chunks.json
+      hash: md5
+      md5: fdba261ea461a21c8f3b19b9affd000f
+      size: 1123286
+  index:
+    cmd: uv run python -m arabic_legal_rag.index build
+    deps:
+    - path: data/processed/articles.json
+      hash: md5
+      md5: 83728f8e9d7ae953a70bbde30b0c32c5
+      size: 1192731
+    - path: data/processed/chunks.json
+      hash: md5
+      md5: fdba261ea461a21c8f3b19b9affd000f
+      size: 1123286
+    - path: src/arabic_legal_rag/index.py
+      hash: md5
+      md5: c02aa666500d7870c2c8ec28751741db
+      size: 3623
+    outs:
+    - path: data/chroma
+      hash: md5
+      md5: 21a2b7d307731b78cb5155e5226fd0b4.dir
+      size: 21521696
+      nfiles: 11

@@ -1,0 +1,34 @@
+stages:
+  corpus:
+    cmd: >-
+      uv run python -m arabic_legal_rag.extract &&
+      uv run python scripts/fixup5.py &&
+      uv run python scripts/fixup6.py &&
+      uv run python scripts/fixup7.py --apply &&
+      uv run python scripts/fixup8.py --apply
+    deps:
+      - data/raw/civil_code.pdf
+      - src/arabic_legal_rag/extract.py
+      - scripts/fixup5.py
+      - scripts/fixup6.py
+      - scripts/fixup7.py
+      - scripts/fixup8.py
+    outs:
+      - data/processed/articles.json
+
+  chunks:
+    cmd: uv run python -m arabic_legal_rag.chunk --max-chars 1500 --overlap 0
+    deps:
+      - data/processed/articles.json
+      - src/arabic_legal_rag/chunk.py
+    outs:
+      - data/processed/chunks.json
+
+  index:
+    cmd: uv run python -m arabic_legal_rag.index build
+    deps:
+      - data/processed/articles.json
+      - data/processed/chunks.json
+      - src/arabic_legal_rag/index.py
+    outs:
+      - data/chroma
