@@ -41,9 +41,9 @@ def evaluate(split=None, include_weak=True, k_max=50, search_fn=search) -> dict:
 
 if __name__ == "__main__":
     for label, kw in [
-        ("dev (all)", dict(split="dev")),
-        ("dev (no weak)", dict(split="dev", include_weak=False)),
-        ("test (all)", dict(split="test")),
+        ("dev (all)", {"split": "dev"}),
+        ("dev (no weak)", {"split": "dev", "include_weak": False}),
+        ("test (all)", {"split": "test"}),
     ]:
         res = evaluate(**kw)
         print(label, res["summary"])

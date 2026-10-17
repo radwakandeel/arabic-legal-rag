@@ -12,7 +12,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from arabic_legal_rag.chunk import build as build_chunks
-from arabic_legal_rag.eval_hard import QUESTIONS, load as load_questions
+from arabic_legal_rag.eval_hard import load as load_questions
 
 CHUNKS = Path("data/processed/chunks.json")
 ARTICLES = Path("data/processed/articles.json")
@@ -26,17 +26,17 @@ E5B = "intfloat/multilingual-e5-base"
 BGE = "BAAI/bge-m3"
 
 CONFIGS = [
-    dict(name="r1-e5small-mindist", model=E5S, fusion="min_distance", sections=True),
-    dict(name="r2-e5small-rrf", model=E5S, fusion="rrf", sections=True),
-    dict(name="r3-e5small-no-headings", model=E5S, fusion="min_distance", sections=False),
-    dict(name="r4-e5base-mindist", model=E5B, fusion="min_distance", sections=True),
-    dict(name="r5-bgem3-mindist", model=BGE, fusion="min_distance", sections=True, slow=True),
-    dict(name="r6-bgem3-rrf", model=BGE, fusion="rrf", sections=True, slow=True),
-    dict(name="r7-e5small-c400-o0", model=E5S, fusion="min_distance", sections=True, chunk=(400, 0)),
-    dict(name="r8-e5small-c400-o1", model=E5S, fusion="min_distance", sections=True, chunk=(400, 1)),
-    dict(name="r9-e5small-c800-o0", model=E5S, fusion="min_distance", sections=True, chunk=(800, 0)),
-    dict(name="r10-e5small-c800-o1", model=E5S, fusion="min_distance", sections=True, chunk=(800, 1)),
-    dict(name="r11-e5small-c1200-o0", model=E5S, fusion="min_distance", sections=True, chunk=(1200, 0)),
+    {"name": "r1-e5small-mindist", "model": E5S, "fusion": "min_distance", "sections": True},
+    {"name": "r2-e5small-rrf", "model": E5S, "fusion": "rrf", "sections": True},
+    {"name": "r3-e5small-no-headings", "model": E5S, "fusion": "min_distance", "sections": False},
+    {"name": "r4-e5base-mindist", "model": E5B, "fusion": "min_distance", "sections": True},
+    {"name": "r5-bgem3-mindist", "model": BGE, "fusion": "min_distance", "sections": True, "slow": True},
+    {"name": "r6-bgem3-rrf", "model": BGE, "fusion": "rrf", "sections": True, "slow": True},
+    {"name": "r7-e5small-c400-o0", "model": E5S, "fusion": "min_distance", "sections": True, "chunk": (400, 0)},
+    {"name": "r8-e5small-c400-o1", "model": E5S, "fusion": "min_distance", "sections": True, "chunk": (400, 1)},
+    {"name": "r9-e5small-c800-o0", "model": E5S, "fusion": "min_distance", "sections": True, "chunk": (800, 0)},
+    {"name": "r10-e5small-c800-o1", "model": E5S, "fusion": "min_distance", "sections": True, "chunk": (800, 1)},
+    {"name": "r11-e5small-c1200-o0", "model": E5S, "fusion": "min_distance", "sections": True, "chunk": (1200, 0)},
 ]
 
 _models = {}
@@ -131,7 +131,7 @@ def main():
     if a.split == "test" and not a.final:
         raise SystemExit("test split is for the final measurement only: add --final")
 
-    chunks = json.loads(CHUNKS.read_text(encoding="utf-8"))
+    json.loads(CHUNKS.read_text(encoding="utf-8"))
     arts = json.loads(ARTICLES.read_text(encoding="utf-8"))
     sections = {
         x["article_number"]: {"ar": x.get("section_ar", ""), "en": x.get("section_en", "")}
@@ -148,9 +148,7 @@ def main():
         if a.only:
             if cfg["name"] not in a.only:
                 continue
-        elif cfg.get("slow") and not a.all:
-            continue
-        elif cfg.get("chunk") and not a.chunking:
+        elif cfg.get("slow") and not a.all or cfg.get("chunk") and not a.chunking:
             continue
         print("RUN", cfg["name"], flush=True)
         t0 = time.time()
