@@ -509,8 +509,10 @@
     "id": "n35",
     "question": "هل المحكمة تقدر تحكم بسقوط الحق بالتقادم من نفسها لو المدين ما تمسكش بيه؟",
     "type": "retrieval",
-    "articles": [],
-    "status": "pending",
+    "articles": [
+      387
+    ],
+    "status": "reviewed",
     "split": "dev",
     "note": ""
   },
