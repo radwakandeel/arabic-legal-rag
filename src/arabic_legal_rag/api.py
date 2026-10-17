@@ -21,12 +21,12 @@ class AskRequest(BaseModel):
 
 class AskResponse(BaseModel):
     answer: str
-    sources: list[int]
+    sources: list[str]
 
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "documents_indexed": len(rag.articles())}
+    return {"status": "healthy", "documents_indexed": len(rag.articles())}
 
 
 @app.post("/ask", response_model=AskResponse)

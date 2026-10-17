@@ -40,7 +40,12 @@ def articles() -> dict:
     for c in sorted(chunks, key=lambda x: (x["article_number"], x.get("part", 1))):
         a = out.setdefault(
             c["article_number"],
-            {"text_ar": "", "text_en": "", "is_repealed": c["is_repealed"]},
+            {
+                "text_ar": "",
+                "text_en": "",
+                "is_repealed": bool(c.get("is_repealed", False)),
+                "citation": c.get("citation") or f"Egyptian Civil Code, Article {c['article_number']}",
+            },
         )
         a["text_ar"] += (c.get("text_ar") or "") + "\n"
         a["text_en"] += (c.get("text_en") or "") + "\n"
@@ -51,13 +56,18 @@ def retrieve(question: str, k: int = 8) -> list[int]:
     return [r["article_number"] for r in search(question, k=k)]
 
 
+def citations_for(numbers: list[int]) -> list[str]:
+    arts = articles()
+    return [arts[n]["citation"] for n in numbers]
+
+
 def build_prompt(question: str, numbers: list[int]) -> str:
     arts = articles()
     parts = []
     for n in numbers:
         a = arts[n]
         tag = " [REPEALED]" if a["is_repealed"] else ""
-        parts.append(f"Article {n}{tag}\nAR: {a['text_ar'].strip()}\nEN: {a['text_en'].strip()}")
+        parts.append(f"{a['citation']}{tag}\nAR: {a['text_ar'].strip()}\nEN: {a['text_en'].strip()}")
     return f"{SYSTEM}\n\n=== ARTICLES ===\n" + "\n\n".join(parts) + f"\n\n=== QUESTION ===\n{question}"
 
 
@@ -87,7 +97,7 @@ def generate(prompt: str) -> str:
 def ask(question: str, k: int = 8) -> dict:
     numbers = retrieve(question, k)
     answer = generate(build_prompt(question, numbers))
-    return {"answer": answer, "sources": numbers}
+    return {"answer": answer, "sources": citations_for(numbers)}
 
 
 if __name__ == "__main__":
