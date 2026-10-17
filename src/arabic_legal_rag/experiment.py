@@ -12,7 +12,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from arabic_legal_rag.chunk import build as build_chunks
-from arabic_legal_rag.eval_hard import QUESTIONS
+from arabic_legal_rag.eval_hard import QUESTIONS, load as load_questions
 
 CHUNKS = Path("data/processed/chunks.json")
 ARTICLES = Path("data/processed/articles.json")
@@ -124,7 +124,12 @@ def main():
     ap.add_argument("--all", action="store_true", help="include slow runs (bge-m3)")
     ap.add_argument("--chunking", action="store_true", help="include chunk_size/overlap runs")
     ap.add_argument("--only", nargs="*", help="run only these run names")
+    ap.add_argument("--split", default="dev", choices=["dev", "test"])
+    ap.add_argument("--no-weak", action="store_true", help="skip questions marked weak")
+    ap.add_argument("--final", action="store_true", help="required to evaluate the test split")
     a = ap.parse_args()
+    if a.split == "test" and not a.final:
+        raise SystemExit("test split is for the final measurement only: add --final")
 
     chunks = json.loads(CHUNKS.read_text(encoding="utf-8"))
     arts = json.loads(ARTICLES.read_text(encoding="utf-8"))
@@ -132,10 +137,11 @@ def main():
         x["article_number"]: {"ar": x.get("section_ar", ""), "en": x.get("section_en", "")}
         for x in arts
     }
-    questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
+    questions = load_questions(a.split, include_weak=not a.no_weak)
+    print("questions:", len(questions), "split:", a.split, flush=True)
 
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
-    mlflow.set_experiment("arabic-legal-rag-retrieval")
+    mlflow.set_experiment("arabic-legal-rag-retrieval-v2")
 
     table = []
     for cfg in CONFIGS:
@@ -162,7 +168,7 @@ def main():
             hits = [i for i, n in enumerate(fused, 1) if n in q["articles"]]
             ranks[q["id"]] = hits[0] if hits else None
         m = metrics(ranks)
-        with mlflow.start_run(run_name=cfg["name"]):
+        with mlflow.start_run(run_name=f"{cfg['name']}@{a.split}"):
             mlflow.log_params(
                 {
                     "embedding_model": cfg["model"],
@@ -173,6 +179,8 @@ def main():
                     "n_chunks": len(run_chunks),
                     "n_per_index": N_PER_INDEX,
                     "n_questions": len(questions),
+                    "eval_split": a.split,
+                    "exclude_weak": a.no_weak,
                 }
             )
             mlflow.log_metrics(m)

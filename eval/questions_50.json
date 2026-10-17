@@ -1,0 +1,562 @@
+[
+  {
+    "id": "h01",
+    "question": "ما العلاقة بين الإعذار واستحقاق التعويض عن التأخير في تنفيذ الالتزام؟",
+    "type": "retrieval",
+    "articles": [
+      218,
+      219,
+      220
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "h02",
+    "question": "أتلف شخص مالًا مملوكًا لغيره دون وجود عقد بينهما. ما أساس المطالبة بالتعويض؟",
+    "type": "retrieval",
+    "articles": [
+      163
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "h03",
+    "question": "ما رقم المادة التي تنظم المسؤولية عن الأعمال الشخصية، وما نصها؟",
+    "type": "retrieval",
+    "articles": [
+      163
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "h04",
+    "question": "كيف يؤثر استحالة تنفيذ الالتزام على مسؤولية المدين؟",
+    "type": "retrieval",
+    "articles": [
+      373,
+      215
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "h05",
+    "question": "ما الشروط التي يجب توافرها للمقاصة بين دينين؟",
+    "type": "retrieval",
+    "articles": [
+      362
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "h06",
+    "question": "ما المقصود بالقوة القاهرة في القانون المدني؟",
+    "type": "retrieval",
+    "articles": [
+      165
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": "weak"
+  },
+  {
+    "id": "h07",
+    "question": "متى يستطيع أحد المتعاقدين طلب فسخ العقد بدلًا من المطالبة بالتنفيذ؟",
+    "type": "retrieval",
+    "articles": [
+      157,
+      158
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "h08",
+    "question": "ما المقصود بحسن النية في تنفيذ العقود؟",
+    "type": "retrieval",
+    "articles": [
+      148
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "h09",
+    "question": "ما شروط الإثراء بلا سبب؟",
+    "type": "retrieval",
+    "articles": [
+      179
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "h10",
+    "question": "اشترى شخص سيارة بناءً على معلومات جوهرية كاذبة قدمها البائع. ما الأساس القانوني المحتمل للطعن على العقد؟",
+    "type": "retrieval",
+    "articles": [
+      125
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "h11",
+    "question": "أبرم شخص عقدًا تحت تهديد غير مشروع. ما المسائل التي يجب التحقق منها لتحديد أثر التهديد على العقد؟",
+    "type": "retrieval",
+    "articles": [
+      127
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n01",
+    "question": "ما الفرق بين العقد الباطل والعقد القابل للإبطال؟",
+    "type": "retrieval",
+    "articles": [
+      139,
+      140,
+      141
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n02",
+    "question": "ما الفرق بين فسخ العقد وانفساخه من تلقاء نفسه؟",
+    "type": "retrieval",
+    "articles": [
+      157,
+      158,
+      159
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n03",
+    "question": "متى تنتقل ملكية العقار المباع للمشتري، وهل يكفي العقد وحده؟",
+    "type": "retrieval",
+    "articles": [
+      204,
+      934
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n05",
+    "question": "دفعت الدين كله والدائن بيطالبني بيه تاني، إزاي أثبت إني سددت؟",
+    "type": "retrieval",
+    "articles": [
+      349
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n06",
+    "question": "هل يجوز الاتفاق مقدمًا على مبلغ تعويض معين لو أخل أحد الطرفين بالعقد؟",
+    "type": "retrieval",
+    "articles": [
+      223,
+      224
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n07",
+    "question": "بعد كام سنة يسقط حق الدائن في المطالبة بدينه لو سكت؟",
+    "type": "retrieval",
+    "articles": [
+      374
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n08",
+    "question": "هل يجوز للدائن ينقل حقه ضدي لشخص تاني من غير موافقتي؟",
+    "type": "retrieval",
+    "articles": [
+      303
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n09",
+    "question": "إيه مسؤولية الكفيل لو المدين الأصلي ما دفعش؟",
+    "type": "retrieval",
+    "articles": [
+      772
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n10",
+    "question": "صاحب العمل مسؤول لو الموظف عنده أضر بحد وهو بيشتغل؟",
+    "type": "retrieval",
+    "articles": [
+      174
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n11",
+    "question": "مين المسؤول لو حيوان أذى حد؟",
+    "type": "retrieval",
+    "articles": [
+      176
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n12",
+    "question": "صاحب البناء مسؤول لو حيطة وقعت على المارة؟",
+    "type": "retrieval",
+    "articles": [
+      177
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n13",
+    "question": "أقدر أطلب تعويض عن الضرر النفسي مش المادي؟",
+    "type": "retrieval",
+    "articles": [
+      222
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n14",
+    "question": "إيه الحد الأقصى القانوني لسعر الفايدة المتفق عليها بين الأفراد؟",
+    "type": "retrieval",
+    "articles": [
+      227
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n15",
+    "question": "قاصر عنده 16 سنة اشترى حاجة بنفسه، العقد ده صحيح؟",
+    "type": "retrieval",
+    "articles": [
+      111
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n16",
+    "question": "اشتريت حاجة بسعر أعلى بكتير من قيمتها لأن البائع استغل ضعفي، أعمل إيه؟",
+    "type": "retrieval",
+    "articles": [
+      129
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n17",
+    "question": "وقعت في غلط جوهري في صفة الشيء اللي اشتريته، أقدر أطلب إبطال العقد؟",
+    "type": "retrieval",
+    "articles": [
+      120,
+      121
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n18",
+    "question": "المستأجر مسؤول عن إيه لو الشقة اتضررت؟",
+    "type": "retrieval",
+    "articles": [
+      583,
+      584
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n19",
+    "question": "الوكيل تجاوز حدود الوكالة، العقد بيلزم مين؟",
+    "type": "retrieval",
+    "articles": [
+      703,
+      105
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": "weak"
+  },
+  {
+    "id": "n20",
+    "question": "مدين باع ممتلكاته عشان يهرب من الدين، الدائن يعمل إيه؟",
+    "type": "retrieval",
+    "articles": [
+      237,
+      238,
+      239
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n21",
+    "question": "لو اتباعت حصة في عقار مشترك، مين له أولوية يشتريها؟",
+    "type": "retrieval",
+    "articles": [
+      936
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n22",
+    "question": "ينفع أتعاقد على بيع حاجة مش موجودة دلوقتي لكن هتتوجد بعدين؟",
+    "type": "retrieval",
+    "articles": [
+      131
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n23",
+    "question": "أقدر أمتنع عن تسليم حاجة لحد ما الطرف التاني ينفذ التزامه؟",
+    "type": "retrieval",
+    "articles": [
+      161,
+      246
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n24",
+    "question": "لو مدينين كتير عليهم نفس الدين، الدائن يطالب مين فيهم؟",
+    "type": "retrieval",
+    "articles": [
+      285
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n25",
+    "question": "إيه الفرق بين الالتزام المعلّق على شرط والالتزام المضاف لأجل؟",
+    "type": "retrieval",
+    "articles": [
+      265,
+      271
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n26",
+    "question": "اتفقنا على عقد صوري عشان نخبي بيع حقيقي، أيهما يسري؟",
+    "type": "retrieval",
+    "articles": [
+      245,
+      244
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n27",
+    "question": "إيه شروط اكتساب ملكية أرض بوضع اليد المدة الطويلة؟",
+    "type": "retrieval",
+    "articles": [
+      968,
+      969
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n28",
+    "question": "مقاول بنى عمارة وظهرت فيها عيوب بعد سنين، لسه مسؤول؟",
+    "type": "retrieval",
+    "articles": [
+      651,
+      653
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": ""
+  },
+  {
+    "id": "n29",
+    "question": "الهبة بتحتاج شكل معين عشان تصح؟",
+    "type": "retrieval",
+    "articles": [
+      488,
+      489
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n30",
+    "question": "لو اتنين اتنازعوا وعملوا صلح، ينفع واحد يرجع فيه؟",
+    "type": "retrieval",
+    "articles": [
+      553
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": "weak"
+  },
+  {
+    "id": "n31",
+    "question": "المودَع عنده مسؤول لو الوديعة اتسرقت منه؟",
+    "type": "retrieval",
+    "articles": [
+      720
+    ],
+    "status": "reviewed",
+    "split": "test",
+    "note": "weak"
+  },
+  {
+    "id": "n32",
+    "question": "المقترض لازم يرد نفس الشيء ولا مثله؟",
+    "type": "retrieval",
+    "articles": [
+      538
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n33",
+    "question": "الشريك مسؤول عن ديون الشركة بحدود حصته ولا بكل ماله؟",
+    "type": "retrieval",
+    "articles": [
+      523,
+      524
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "n34",
+    "question": "الراهن يقدر يبيع الشيء المرهون؟",
+    "type": "retrieval",
+    "articles": [
+      1101
+    ],
+    "status": "reviewed",
+    "split": "dev",
+    "note": "weak"
+  },
+  {
+    "id": "n35",
+    "question": "هل المحكمة تقدر تحكم بسقوط الحق بالتقادم من نفسها لو المدين ما تمسكش بيه؟",
+    "type": "retrieval",
+    "articles": [],
+    "status": "pending",
+    "split": "dev",
+    "note": ""
+  },
+  {
+    "id": "x31",
+    "question": "ما رقم المادة التي تنص على أن كل عقد يجب توثيقه رسميًا حتى يكون صحيحًا؟",
+    "type": "hallucination",
+    "articles": [],
+    "status": "n/a",
+    "split": "n/a",
+    "note": "افتراض خاطئ عمومًا، لكن بعض العقود فعلًا بتلزمها شكلية (مثل الهبة م488)، فالرد الصح مش دايمًا (مفيش)"
+  },
+  {
+    "id": "x32",
+    "question": "ما العقوبة الجنائية المقررة لكل من يخل بالتزام تعاقدي؟",
+    "type": "hallucination",
+    "articles": [],
+    "status": "n/a",
+    "split": "n/a",
+    "note": "العقوبات الجنائية مش من اختصاص القانون المدني"
+  },
+  {
+    "id": "x33",
+    "question": "هل يحق للدائن دائمًا الحصول على تعويض دون إثبات أي شروط أخرى؟",
+    "type": "hallucination",
+    "articles": [],
+    "status": "n/a",
+    "split": "n/a",
+    "note": "الافتراض خاطئ: للتعويض شروط"
+  },
+  {
+    "id": "x34",
+    "question": "اذكر مادة تنص صراحةً على أن جميع العقود الشفوية باطلة.",
+    "type": "hallucination",
+    "articles": [],
+    "status": "n/a",
+    "split": "n/a",
+    "note": "افتراض خاطئ"
+  },
+  {
+    "id": "x35",
+    "question": "ما الحكم القانوني لمسألة لا يتناولها النص المسترجع؟",
+    "type": "hallucination",
+    "articles": [],
+    "status": "n/a",
+    "split": "n/a",
+    "note": "سؤال غامض: المطلوب رد إن المعلومة غير كافية"
+  }
+]
