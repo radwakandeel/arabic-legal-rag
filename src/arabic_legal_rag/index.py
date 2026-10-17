@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 CHUNKS = Path("data/processed/chunks.json")
 ARTICLES = Path("data/processed/articles.json")
 DB_DIR = "data/chroma"
-MODEL = "intfloat/multilingual-e5-small"
+MODEL = "BAAI/bge-m3"
 _model = None
 
 
@@ -16,10 +16,12 @@ def get_model():
     global _model
     if _model is None:
         _model = SentenceTransformer(MODEL)
+        _model.max_seq_length = 512
     return _model
 
 
 def embed(texts, prefix, batch=32):
+    prefix = prefix if "e5" in MODEL else ""  # bge-m3 takes no prefixes
     vecs = get_model().encode(
         [prefix + t for t in texts],
         batch_size=batch,
