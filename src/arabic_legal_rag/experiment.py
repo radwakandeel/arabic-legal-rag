@@ -30,6 +30,7 @@ CONFIGS = [
     dict(name="r3-e5small-no-headings", model=E5S, fusion="min_distance", sections=False),
     dict(name="r4-e5base-mindist", model=E5B, fusion="min_distance", sections=True),
     dict(name="r5-bgem3-mindist", model=BGE, fusion="min_distance", sections=True, slow=True),
+    dict(name="r6-bgem3-rrf", model=BGE, fusion="rrf", sections=True, slow=True),
 ]
 
 _models = {}
