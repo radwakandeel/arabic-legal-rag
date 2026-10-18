@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-10-19T00:56:07",
+  "judge_and_generator_model": "gemini-3.5-flash-lite",
+  "split": "dev",
+  "questions_requested": 20,
+  "questions_scored": 20,
+  "skipped_generation": [],
+  "k_articles": 8,
+  "rpm": 8.0,
+  "answer_relevancy_strictness": 3,
+  "total_http_requests": 287,
+  "generation_requests": 19,
+  "seconds": 2028,
+  "means": {
+    "faithfulness": 0.8236,
+    "answer_relevancy": 0.6727,
+    "llm_context_precision_with_reference": 0.4167,
+    "context_recall": 0.6083
+  },
+  "nan_counts": {
+    "faithfulness": 0,
+    "answer_relevancy": 1,
+    "llm_context_precision_with_reference": 0,
+    "context_recall": 0
+  },
+  "note": "reference = text of gold articles; judge = same model as generator"
+}
