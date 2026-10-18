@@ -11,7 +11,7 @@ from arabic_legal_rag.index import search
 
 ROOT = Path(__file__).resolve().parents[2]
 CHUNKS_PATH = ROOT / "data" / "processed" / "chunks.json"
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 URL = "https://generativelanguage.googleapis.com/v1beta/models/{}:generateContent"
 
 SYSTEM = (
