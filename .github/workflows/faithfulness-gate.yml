@@ -1,0 +1,82 @@
+name: faithfulness-gate
+
+# Runs the RAGAS faithfulness check on 20 dev questions and FAILS if the mean is below 0.75.
+# It costs about 60 Gemini requests per run, so it only runs when code that can change
+# answers is touched, or by hand (Actions > faithfulness-gate > Run workflow).
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/**"
+      - "dvc.lock"
+      - "eval/**"
+      - "scripts/run_ragas.py"
+      - ".github/workflows/faithfulness-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "dvc.lock"
+      - "eval/**"
+      - "scripts/run_ragas.py"
+      - ".github/workflows/faithfulness-gate.yml"
+
+permissions:
+  contents: read
+
+# One run at a time: parallel runs would share the same free-tier request quota.
+concurrency:
+  group: faithfulness-gate
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+      - run: uv sync --frozen
+
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-bge-m3-v1
+
+      - name: Pull data from DagsHub
+        env:
+          DAGSHUB_USER: ${{ secrets.DAGSHUB_USER }}
+          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+        run: |
+          uv run dvc remote modify origin --local auth basic
+          uv run dvc remote modify origin --local user "$DAGSHUB_USER"
+          uv run dvc remote modify origin --local password "$DAGSHUB_TOKEN"
+          uv run dvc pull
+
+      - name: Faithfulness gate (fails below 0.75)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          uv run python scripts/run_ragas.py \
+            --n 20 --rpm 8 --metrics faithfulness --fail-below 0.75 \
+            --workdir "$RUNNER_TEMP/ragas" --out "$RUNNER_TEMP/ragas_summary.json"
+
+      - name: Show result in the job summary
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/ragas_summary.json" ]; then
+            { echo '```json'; cat "$RUNNER_TEMP/ragas_summary.json"; echo; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload scores
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ragas-faithfulness
+          path: |
+            ${{ runner.temp }}/ragas_summary.json
+            ${{ runner.temp }}/ragas/ragas_scores.csv
+          if-no-files-found: ignore

@@ -11,12 +11,14 @@ Design choices (also to be written in the README):
 Usage:
   uv run python scripts/run_ragas.py --probe          # 1 question, prints requests used
   uv run python scripts/run_ragas.py --dry-run        # retrieval only, no LLM calls
-  uv run python scripts/run_ragas.py --n 30 --rpm 10  # the real run
+  uv run python scripts/run_ragas.py --n 20 --rpm 8   # the full 4-metric run
+  uv run python scripts/run_ragas.py --n 20 --rpm 8 --metrics faithfulness --fail-below 0.75   # CI gate
 """
 import argparse
 import asyncio
 import json
 import os
+import sys
 import threading
 import time
 import warnings
@@ -155,6 +157,12 @@ def main():
     ap.add_argument("--timeout", type=int, default=120)
     ap.add_argument("--workdir", default=str(Path.home() / "scratch" / "arabic-legal-rag" / "ragas"))
     ap.add_argument("--out", default=str(ROOT / "reports" / "ragas_summary.json"))
+    ap.add_argument(
+        "--metrics",
+        default="faithfulness,answer_relevancy,context_precision,context_recall",
+        help="comma list; fewer metrics = fewer requests",
+    )
+    ap.add_argument("--fail-below", type=float, default=None, help="exit 1 if mean faithfulness is below this")
     ap.add_argument("--probe", action="store_true", help="run 1 question and report requests used")
     ap.add_argument("--dry-run", action="store_true", help="retrieval only, no LLM calls")
     args = ap.parse_args()
@@ -190,12 +198,19 @@ def main():
         bypass_n=True,  # do not rely on Gemini supporting n>1 in the OpenAI-compatible API
     )
     emb = LangchainEmbeddingsWrapper(make_embeddings(), run_config=run_config)
-    metrics = [
-        Faithfulness(),
-        ResponseRelevancy(strictness=args.strictness),
-        LLMContextPrecisionWithReference(),
-        LLMContextRecall(),
-    ]
+    available = {
+        "faithfulness": lambda: Faithfulness(),
+        "answer_relevancy": lambda: ResponseRelevancy(strictness=args.strictness),
+        "context_precision": lambda: LLMContextPrecisionWithReference(),
+        "context_recall": lambda: LLMContextRecall(),
+    }
+    wanted = [m.strip() for m in args.metrics.split(",") if m.strip()]
+    unknown = [m for m in wanted if m not in available]
+    if unknown:
+        sys.exit(f"unknown metric(s): {unknown}; choose from {list(available)}")
+    metrics = [available[m]() for m in wanted]
+    if args.fail_below is not None and "faithfulness" not in wanted:
+        sys.exit("--fail-below needs the faithfulness metric")
     dataset = EvaluationDataset.from_list(
         [{k: v for k, v in r.items() if k != "id"} for r in rows]
     )
@@ -225,6 +240,7 @@ def main():
         "seconds": round(time.time() - t0),
         "means": {c: (None if df[c].dropna().empty else round(float(df[c].mean()), 4)) for c in metric_cols},
         "nan_counts": {c: int(df[c].isna().sum()) for c in metric_cols},
+        "metrics_run": wanted,
         "note": "reference = text of gold articles; judge = same model as generator",
     }
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
@@ -232,6 +248,20 @@ def main():
     print(json.dumps(summary, ensure_ascii=False, indent=2))
     print(f"\nrequests: total={throttle.count} (generation={gen_requests}, ragas judge={throttle.count - gen_requests})")
     print(f"per-question scores: {workdir / 'ragas_scores.csv'}")
+
+    if args.fail_below is not None:
+        mean = summary["means"].get("faithfulness")
+        nans = summary["nan_counts"].get("faithfulness", 0)
+        if mean is None:
+            print("GATE FAILED: no faithfulness score could be computed")
+            sys.exit(1)
+        if nans > len(rows) // 4:
+            print(f"GATE FAILED: faithfulness is missing for {nans} of {len(rows)} questions (evaluation unreliable)")
+            sys.exit(1)
+        if mean < args.fail_below:
+            print(f"GATE FAILED: faithfulness {mean:.3f} is below {args.fail_below}")
+            sys.exit(1)
+        print(f"GATE PASSED: faithfulness {mean:.3f} >= {args.fail_below} ({nans} missing of {len(rows)})")
 
 
 if __name__ == "__main__":
