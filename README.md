@@ -155,8 +155,8 @@ How to read these numbers:
 - The judge is the **same model that wrote the answers**, which can bias scores upward.
 - `reference` is the **text of the gold articles** (no hand-written reference answers), so recall measures how
   much of the gold article text the retrieved context covers.
-- No faithfulness gate in CI yet (planned: fail below 0.75, alert below 0.80). The measured 0.824 is only 0.024
-  above the alert level.
+- A faithfulness gate runs in CI (see [CI/CD](#cicd)) and fails below 0.75. The planned alert level of 0.80 is
+  not implemented yet, and the measured 0.824 is only 0.024 above it.
 
 ## CI/CD
 
@@ -168,7 +168,20 @@ GitHub Actions (`.github/workflows/ci.yml`), on pushes and pull requests:
   Registry on `main` only.
 
 CI runs `dvc pull` instead of rebuilding the index, so it does **not** prove the index can be rebuilt from scratch.
-There is **no faithfulness gate yet**.
+A second workflow, `.github/workflows/faithfulness-gate.yml`, is the **faithfulness gate**. It generates answers for
+20 dev questions, scores faithfulness with RAGAS, and **fails the run if the mean is below 0.75**
+(`scripts/run_ragas.py --n 20 --metrics faithfulness --fail-below 0.75`, about 60 Gemini requests and 9 minutes).
+It needs the `GEMINI_API_KEY` secret. To save the free-tier quota it only runs when `src/`, `dvc.lock`, `eval/`
+or the script change, or by hand from the Actions tab. The first run passed (the score is in that run's job summary).
+
+Limits of the gate:
+
+- Answers are regenerated on every run, so the score moves a little between runs. The margin over the threshold
+  is small (0.824 measured locally against 0.75).
+- An honest "not found in the retrieved articles" answer counts as faithfulness 0 in RAGAS, so a retrieval
+  regression can fail the gate even when the model does not hallucinate.
+- It runs after code is pushed to `main` and on pull requests; it does not by itself block a merge unless branch
+  protection requires it (not enabled).
 
 ## Honesty: known limits
 
@@ -188,7 +201,7 @@ There is **no faithfulness gate yet**.
   56 articles are repealed; they stay in the index and are flagged `[REPEALED]` in the prompt.
 - **Needs the internet and a large model.** Answers need the Gemini API. The embedding model (bge-m3) is about
   2 GB. Arabic text is not normalized beyond what the extraction does.
-- **Not implemented yet:** a faithfulness quality gate in CI, serving with BentoML, a Locust load test and
+- **Not implemented yet:** serving with BentoML, a Locust load test and
   canary notes, Grafana dashboards with the faithfulness alert, a streaming `/ask`, a batch re-indexing script,
   and Arabic text normalization for search.
 
