@@ -112,6 +112,11 @@ made no measurable difference, because articles are short. All 11 early runs and
 (experiments `arabic-legal-rag-retrieval` and `arabic-legal-rag-retrieval-v2`). The Model Registry holds a
 **configuration** (bge-m3, minimum distance, chunk 1500) as `arabic-legal-rag-retrieval-config` v1 with alias
 `production`, not a trained model. Screenshots and the run table are in `reports/`.
+The RAGAS scores (`ragas_faithfulness`, `ragas_answer_relevancy`, `ragas_context_precision`,
+`ragas_context_recall`, plus a `_missing` count each) are logged on the `register-best-config` run that the
+alias points to (`reports/mlflow_registry_ragas.png`, logged by `scripts/log_ragas_to_mlflow.py`). They come
+from a separate evaluation, not from the retrieval run, see [RAGAS](#ragas). `mlflow.db` is not in git, so
+that screenshot is the record.
 
 ## Answer quality
 
