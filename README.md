@@ -177,12 +177,14 @@ A second workflow, `.github/workflows/faithfulness-gate.yml`, is the **faithfuln
 20 dev questions, scores faithfulness with RAGAS, and **fails the run if the mean is below 0.75**
 (`scripts/run_ragas.py --n 20 --metrics faithfulness --fail-below 0.75`, about 60 Gemini requests and 9 minutes).
 It needs the `GEMINI_API_KEY` secret. To save the free-tier quota it only runs when `src/`, `dvc.lock`, `eval/`
-or the script change, or by hand from the Actions tab. The first run passed (the score is in that run's job summary).
+or the script change, or by hand from the Actions tab. The first run passed with faithfulness **0.848** (20 of 20 questions scored, 61 requests, 5 minutes);
+the same 20 questions scored 0.824 in the earlier local run.
 
 Limits of the gate:
 
 - Answers are regenerated on every run, so the score moves a little between runs. The margin over the threshold
-  is small (0.824 measured locally against 0.75).
+  is small (0.824 locally and 0.848 in CI, against 0.75). The gap between those two runs on the same questions
+  is the run-to-run noise to expect.
 - An honest "not found in the retrieved articles" answer counts as faithfulness 0 in RAGAS, so a retrieval
   regression can fail the gate even when the model does not hallucinate.
 - It runs after code is pushed to `main` and on pull requests; it does not by itself block a merge unless branch
